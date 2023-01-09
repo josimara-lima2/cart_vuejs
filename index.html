@@ -9,17 +9,38 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <h2 class="py-8 font-bold">Carrinho de compra</h2>
+    <div id="app" class="flex flex-col items-center">
+        <h2 class="py-8 font-bold">Carrinho de compra</h2>
+        <cart :products="products"></cart>
+    </div>
+   
+    <template id="cart" >
+        <div class="card shadow rounded-[.25rem] w-[50rem]" style="max-width: 40.625rem;">
+         <div v-for="product in products" :key="product.id">
+            <product :product="product"></product>
+            <hr>
+         </div>   
+       
+      
+   
+    <div class="flex items-center justify-between px-2 py-2">
+      <a href="#" class="underline decoration-[blue] text-[blue]">Continue comprando</a>
+      <div>
+          <small class="text-gray-500">Total: </small><span>R$ 200,00</span>
+      </div>
+    </div>
+   
+    </template>
 
-    <div class="card shadow rounded-[.25rem] w-[50rem]" style="max-width: 40.625rem;">
-          <div class="item flex align-center m-[.1875rem] bg-red py-4 px-8">
+    <template id="product">
+        <div class="item flex align-center m-[.1875rem] bg-red py-4 px-8">
             <div class="flex align-center items-center ">
                 <div class="ml-[3px]">
                     <img src="https://via.placeholder.com/72" alt="" class="rounded-full">
                 </div>
                 <div class="ml-[10px]">
-                    <h4 class="mb-0 font-bold">Produto A</h4>
-                    <span class="">Teste</span>
+                    <h4 class="mb-0 font-bold">{{product.name}}</h4>
+                    <span class="text-gray-500">#{{product.id}}</span>
                 </div>
             </div>
             <div class="ml-auto flex items-center">
@@ -32,7 +53,7 @@
 
                 </div>
                 <div class="flex items-center mx-4">
-                    R$ 10,50
+                   R$ {{product.amount}}
                 </div>
                 <div class="flex items-center mx-4">
                    <button class="rounded-[.125rem] border border-red-500 text-red-500 w-[40px] text-center hover:bg-red-500 hover:text-white">x</button>
@@ -40,35 +61,39 @@
             </div>
           
       </div>
-      <hr>
-      <div class="item flex align-center m-[.1875rem] bg-red py-4 px-8">
-        <div class="flex align-center items-center ">
-            <div class="ml-[3px]">
-                <img src="https://via.placeholder.com/72" alt="" class="rounded-full">
-            </div>
-            <div class="ml-[10px]">
-                <h4 class="mb-0 font-bold">Produto A</h4>
-                <span class="">Teste</span>
-            </div>
-        </div>
-        <div class="ml-auto flex items-center">
-            <div class="flex items-center w-[120px]">
-                <div class="flex">
-                    <button class="border w-[25px]">-</button>
-                    <input type="text" value='1' class="w-[40px] border text-center ">
-                    <button class="border w-[25px]">+</button>
-                </div>
-
-            </div>
-            <div class="flex items-center mx-4">
-                R$ 10,50
-            </div>
-            <div class="flex items-center mx-4">
-                <button class=" rounded-[.125rem] border border-red-500 text-red-500 w-[40px] text-center hover:bg-red-500 hover:text-white">x</button>
-             </div>
-        </div>
-      
-  </div>
+    </template>
     <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        const app = Vue.createApp({
+            data(){
+                return{
+                    products:[
+                        {id: 1, name: 'Produto A', amount: 10.50},
+                        {id: 2, name: 'Produto B', amount: 5},
+                        {id: 3, name: 'Produto C', amount: 7},
+                    ]
+                };
+            },
+        })
+        .component('cart',{
+            template:'#cart',
+            props: {
+                products:{
+                    type: Array,
+                    default: () => []
+                }
+            }
+        })
+        .component('product',{
+            template:'#product',
+            props:{
+                product:{
+                    type: Object,
+                    default: () => ({})
+                }
+            }
+        })
+        .mount('#app')
+    </script>
 </body>
 </html>

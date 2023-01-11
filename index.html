@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="./style.css">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100">
     <div id="app" class="flex flex-col items-center">
-        <h2 class="py-8 font-bold">Carrinho de compra</h2>
+        <h2 class="py-4 font-bold text-lg">Carrinho de compra</h2>
         <cart @delete="deleteProduct" :products="products"></cart>
     </div>
    
     <template id="cart" >
-        <div class="card shadow rounded-[.25rem] w-[50rem]" style="max-width: 40.625rem;">
+        <div class="card shadow rounded-[.25rem] w-[50rem] bg-white" style="max-width: 40.625rem;">
          <div v-for="product in products" :key="product.id">
             <product @delete="deleteProduct" :product="product"></product>
             <hr>
@@ -47,12 +47,12 @@
                 <div class="flex items-center w-[120px]">
                     <div class="flex">
                         <button @click="remove()" :disabled="product.qty <= 1" class="border w-[25px] ">-</button>
-                        <input type="text" :value='product.qty' readonly class="w-[40px] border text-center">
+                        <input type="text" :value='product.qty' readonly class="w-[40px] border text-center bg-gray-50">
                         <button @click="add()" class="border w-[25px]">+</button>
                     </div>
 
                 </div>
-                <div class="flex items-center mx-4">
+                <div class="flex items-center mx-4 w-[4.0625rem]">
                    R$ {{total}}
                 </div>
                 <div class="flex items-center mx-4">
@@ -69,8 +69,8 @@
                 return{
                     products:[
                         {id: 1, name: 'Produto A', amount: 10.50, qty:1},
-                        {id: 2, name: 'Produto B', amount: 5,qty:1},
-                        {id: 3, name: 'Produto C', amount: 7,qty:1},
+                        {id: 2, name: 'Produto B', amount: 5.00, qty:1},
+                        {id: 3, name: 'Produto C', amount: 7.00, qty:1},
                     ]
                 };
             },
@@ -94,10 +94,12 @@
             },
             computed:{
                 total(){
-                    return this.products.reduce((total,item) => {
+                    const total = this.products.reduce((total,item) => {
                         total += item.qty * item.amount
                         return total
                     }, 0)
+                    const valor = total.toFixed(2)
+                    return valor
                 }
             },
             methods:{
@@ -123,7 +125,8 @@
             },
             computed:{
                 total(){
-                    return this.product.amount * this.product.qty;
+                    const valor = (this.product.amount * this.product.qty).toFixed(2)
+                    return valor;
                 }
             },
             methods: {
